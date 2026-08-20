@@ -1,0 +1,9 @@
+requests
+beautifulsoup4
+lxml
+playwright
+pandas
+python-dotenv
+pyyaml
+streamlit
+pytest
