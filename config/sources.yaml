@@ -1,0 +1,39 @@
+# Each top-level entry under `sources` is one retailer. `collector` picks how the
+# page is fetched: `requests` for plain HTML, `playwright` for JS-rendered pages.
+# Parsing is tried in this order until one strategy yields a price:
+#   1. `parser.container_selector`/`attributes` (fast, attribute-based)
+#   2. `parser.json_ld` (schema.org Product data embedded as JSON, common on Shopify)
+#   3. `parser.fallback` (schema.org microdata read off individual elements)
+sources:
+  tennis_warehouse:
+    name: "Tennis Warehouse"
+    collector: requests
+    parser:
+      container_selector: "div.desc_top.gtm_detail"
+      attributes:
+        name: data-gtm_detail_name
+        price: data-gtm_detail_price
+        brand: data-gtm_detail_brand
+        sku: data-gtm_detail_stock_number
+      fallback:
+        name_selector: "h1.desc_top-head-title"
+        price_selector: "[itemprop='price']"
+      availability_selector: "[itemprop='availability']"
+    products:
+      - url: "https://www.tennis-warehouse.com/Wilson_RF_01/descpageRCWILSON-WRF1R.html"
+
+  tennis_express:
+    name: "Tennis Express"
+    collector: requests
+    parser:
+      json_ld: true
+    products:
+      - url: "https://tennisexpress.com/products/pro-staff-97-classic-tennis-racquet"
+
+  holabird_sports:
+    name: "Holabird Sports"
+    collector: requests
+    parser:
+      json_ld: true
+    products:
+      - url: "https://www.holabirdsports.com/products/wilson-pro-staff-97-classic"
